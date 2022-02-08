@@ -1,12 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './index.scss';
+import TopBar from './components/topbar/topbar';
+import App from './App';
+import SignIn from './views/signIn/signIn';
+import SignUp from './views/signUp/signUp';
+import Footer from './components/footer/footer';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+      <BrowserRouter>
+        <TopBar />
+        <Routes>
+          <Route path="/" element={<App/>} />
+          <Route path="signIn" element={<SignIn/>} />
+          <Route path="signUp" element={<SignUp/>} />
+        </Routes>
+        <Footer/>
+      </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

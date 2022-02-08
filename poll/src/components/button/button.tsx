@@ -1,22 +1,22 @@
-import './button.scss';
+import clsx from 'clsx';
+import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
+import styles from './button.module.scss';
 
-export enum ButtonVariant {
-    TRANSPARENT = "transparent",
-    WHITE = "white"
-}
+export type ButtonVariant = "transparent" | "white" | "brown";
 
-interface IButton {
-    name: string;
+interface IButton extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
     variant?: ButtonVariant;
 }
 
 const Button: React.FC<IButton> = ({
-    name,
-    variant = ButtonVariant.TRANSPARENT
-    }) => (
-        <div>
-            <a className={"btn " + variant}>{name}</a>
-        </div>
-    )
+    className,
+    variant = "transparent",
+    children,
+    ...rest
+    }) => {
+        return(
+            <button className={clsx(styles["btn"], className, styles[variant])} {...rest}>{children}</button>
+        );
+    }
     
 export default Button;

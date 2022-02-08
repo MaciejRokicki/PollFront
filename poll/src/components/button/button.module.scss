@@ -1,8 +1,8 @@
 .btn {
     border-radius: 5px;
-    margin: 5px;
     padding: 4px 10px 4px 10px;
     cursor: pointer;
+    border: none;
 }
 
 .btn:hover {
@@ -16,4 +16,8 @@
 .white {
     background-color: white;
     color: black;
+}
+
+.brown {
+    background-color: #ffca42;
 }
