@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './index.scss';
-import TopBar from './components/topbar/topbar';
+import NavBar from './components/navbar/navbar';
 import App from './App';
 import SignIn from './views/signIn/signIn';
 import SignUp from './views/signUp/signUp';
@@ -12,7 +12,7 @@ import Footer from './components/footer/footer';
 ReactDOM.render(
   <React.StrictMode>
       <BrowserRouter>
-        <TopBar />
+        <NavBar />
         <Routes>
           <Route path="/" element={<App/>} />
           <Route path="signIn" element={<SignIn/>} />

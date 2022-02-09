@@ -5,20 +5,20 @@
     align-items: flex-start;
 }
 
-.error-label {
+.errorLabel {
     margin: 0px 0px 5px 0px;
 }
 
-.poll-input {
+.pollInput {
     width: calc(100% - 23px);
     height: 30px;
-    margin: 0px 5px 5px 5px;
+    margin: 0px 5px 5px;
     border: none;
     border-radius: 5px;
-    padding: 0px 5px 0px 5px;
+    padding: 0px 5px;
 }
 
-.save-button {
+.saveButton {
     width: 100px;
     margin: 10px 0px 0px 0px;
 }

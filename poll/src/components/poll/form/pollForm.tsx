@@ -41,18 +41,18 @@ const PollForm: React.FC = ({}) => {
 
     return (
         <form onSubmit={handleSubmit(createPoll)}>
-            {errors.question && <div className={styles["error-label"]}>Musisz podać podać treść pytania.</div>}
-            <input className={styles["poll-input"]} 
+            {errors.question && <div className={styles["errorLabel"]}>Musisz podać podać treść pytania.</div>}
+            <input className={styles["pollInput"]} 
                    placeholder="Podaj treść pytania" 
                    {...register("question", { required: true })} />
             {fields.map((field, index) => (
-                <input className={styles["poll-input"]}
+                <input className={styles["pollInput"]}
                     key={field.id}
                     type="text"
                     placeholder="Podaj treść odpowiedzi"
                     {...register(`options.${index}.value`)} />
             ))}
-            <Button type="submit" className={styles["save-button"]} variant="brown">Zapisz</Button>
+            <Button type="submit" className={styles["saveButton"]} variant="brown">Zapisz</Button>
         </form>
     );
 }

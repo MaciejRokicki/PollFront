@@ -22,14 +22,14 @@ const SignUp = () => {
 
     return (
         <div className={styles["content"]}>
-            <form onSubmit={handleSubmit(handleSignIn)} className={styles["sign-up-form"]}>
+            <form onSubmit={handleSubmit(handleSignIn)} className={styles["signUpForm"]}>
                 <label htmlFor="femail" 
-                       className={styles["label-sign-up"]}>
+                       className={styles["labelSignUp"]}>
                     Adres email
                 </label>
                 <input id="femail" 
                        type="text" 
-                       className={styles["input-sign-up"]} 
+                       className={styles["inputSignUp"]} 
                        {...register("email", { required: {
                            value: true, 
                            message: "Te pole jest wymagane."
@@ -39,22 +39,22 @@ const SignUp = () => {
                            }})} />
                 {errors.email && <div>{errors.email.message}</div>}
                 <label htmlFor="fpassword" 
-                       className={styles["label-sign-up"]}>
+                       className={styles["labelSignUp"]}>
                     Hasło
                 </label>
                 <input id="fpassword" 
                        type="password" 
-                       className={styles["input-sign-up"]} 
+                       className={styles["inputSignUp"]} 
                        {...register("password", { required: true, minLength: 6 })} />
                 <label htmlFor="fconfirmPassword" 
-                       className={styles["label-sign-up"]}>
+                       className={styles["labelSignUp"]}>
                     Powtórz hasło
                 </label>
                 <input id="fconfirmPassword" 
                        type="password" 
-                       className={styles["input-sign-up"]} 
+                       className={styles["inputSignUp"]} 
                        {...register("confirmPassword", { required: true, minLength: 6 })} />
-                <Button type="submit" className={styles["btn-sign-up"]} variant="brown">Zaloguj się</Button>
+                <Button type="submit" className={styles["btnSignUp"]} variant="brown">Zaloguj się</Button>
             </form>
         </div>
     );

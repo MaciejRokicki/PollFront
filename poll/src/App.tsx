@@ -13,7 +13,7 @@ function App() {
         </div>
       </div>
       <main>
-        <section className={styles["features-block"]}>
+        <section className={styles["featuresBlock"]}>
           <div className={styles["feature"]}>
             <h2>
               Prostota
@@ -47,7 +47,7 @@ function App() {
             </div>
           </div>
         </section>
-        <section className={styles["poll-block"]}>
+        <section className={styles["pollBlock"]}>
           <div className={styles["poll"]}>
             <h1>Stwórz nową ankietę</h1>
             <PollForm></PollForm>

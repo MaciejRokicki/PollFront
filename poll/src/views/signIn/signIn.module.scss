@@ -4,7 +4,7 @@
     justify-content: center;
 }
 
-.sign-in-form {
+.signInForm {
     width: 350px;
     height: 140px;
     display: flex;
@@ -16,11 +16,11 @@
     margin: 50px 10px 0px 10px;
 }
 
-.label-sign-in {
+.labelSignIn {
     align-self: flex-start;
 }
 
-.input-sign-in {
+.inputSignIn {
     width: calc(100% - 10px);
     margin: 2px 0px 5px 0px;
     border: none;
@@ -28,13 +28,13 @@
     padding: 5px;
 }
 
-.btn-sign-in {
+.btnSignIn {
     width: 100%;
     margin: 5px 0px 0px 0px;
 }
 
 @media only screen and (max-width: 599px) {
-    .sign-in-form {
+    .signInForm {
         width: 100%;
     }
 }
