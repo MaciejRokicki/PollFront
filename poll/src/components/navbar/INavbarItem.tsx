@@ -1,4 +1,4 @@
-import { ButtonVariant } from "../button/button";
+import { ButtonVariant } from "../button/Button";
 
 export interface NavbarItem {
     name: string;

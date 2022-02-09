@@ -1,4 +1,4 @@
-import { NavbarItem } from "./navbarItem";
+import { NavbarItem } from "./INavbarItem";
 
 export const NavbarData: NavbarItem[] = [
     {

@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
-import styles from './button.module.scss';
+import styles from './Button.module.scss';
 
 export type ButtonVariant = "transparent" | "white" | "brown";
 
@@ -13,10 +13,6 @@ const Button: React.FC<IButton> = ({
     variant = "transparent",
     children,
     ...rest
-    }) => {
-        return(
-            <button className={clsx(styles["btn"], className, styles[variant])} {...rest}>{children}</button>
-        );
-    }
+    }) => <button className={clsx(styles["btn"], className, styles[variant])} {...rest}>{children}</button>
     
 export default Button;

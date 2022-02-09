@@ -1,5 +1,5 @@
 import styles from './App.module.scss';
-import PollForm from './components/poll/form/pollForm';
+import PollForm from './components/poll/form/PollForm';
 
 function App() {
   return (

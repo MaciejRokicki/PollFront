@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './index.scss';
-import NavBar from './components/navbar/navbar';
+import NavBar from './components/navbar/Navbar';
 import App from './App';
 import SignIn from './views/signIn/signIn';
 import SignUp from './views/signUp/signUp';
-import Footer from './components/footer/footer';
+import Footer from './components/footer/Footer';
 
 ReactDOM.render(
   <React.StrictMode>

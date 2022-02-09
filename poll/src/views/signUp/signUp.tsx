@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
-import Button from "../../components/button/button";
+import Button from "../../components/button/Button";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./signUp.module.scss";
 
 interface SignUpData {
@@ -9,11 +11,19 @@ interface SignUpData {
 }
 
 const SignUp = () => {
+    const schema = yup.object().shape({
+        email: yup.string().email("Nieprawidłowy format adresu email.").required("Te pole jest wymagane."),
+        password: yup.string().min(6).required("Te pole jest wymagane."),
+        confirmPassword: yup.string().min(6).required("Te pole jest wymagane."),
+    });
+
     const { register, handleSubmit, formState: { errors } } = useForm<SignUpData>({
         defaultValues: {
             email: "",
             password: "",
-        }
+            confirmPassword: "",
+        },
+        resolver: yupResolver(schema),
     })
 
     const handleSignIn = (data: SignUpData) => {
@@ -30,13 +40,7 @@ const SignUp = () => {
                 <input id="femail" 
                        type="text" 
                        className={styles["inputSignUp"]} 
-                       {...register("email", { required: {
-                           value: true, 
-                           message: "Te pole jest wymagane."
-                        }, pattern: { 
-                           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 
-                           message: "Nieprawidłowy format adresu email." 
-                           }})} />
+                       {...register("email")} />
                 {errors.email && <div>{errors.email.message}</div>}
                 <label htmlFor="fpassword" 
                        className={styles["labelSignUp"]}>
@@ -45,7 +49,7 @@ const SignUp = () => {
                 <input id="fpassword" 
                        type="password" 
                        className={styles["inputSignUp"]} 
-                       {...register("password", { required: true, minLength: 6 })} />
+                       {...register("password")} />
                 <label htmlFor="fconfirmPassword" 
                        className={styles["labelSignUp"]}>
                     Powtórz hasło
@@ -53,7 +57,7 @@ const SignUp = () => {
                 <input id="fconfirmPassword" 
                        type="password" 
                        className={styles["inputSignUp"]} 
-                       {...register("confirmPassword", { required: true, minLength: 6 })} />
+                       {...register("confirmPassword")} />
                 <Button type="submit" className={styles["btnSignUp"]} variant="brown">Zaloguj się</Button>
             </form>
         </div>

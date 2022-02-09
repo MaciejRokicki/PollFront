@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import Button from '../button/button';
-import styles from './navbar.module.scss';
-import { NavbarData } from './navbarData';
+import Button from '../button/Button';
+import styles from './Navbar.module.scss';
+import { NavbarData } from './NavbarData';
 import { useState } from 'react';
 import clsx from 'clsx';
-import CloseIcon from '../svg/closeIcon/closeIcon';
-import HamburgerIcon from '../svg/hamburegerIcon/haburgerIcon';
+import CloseIcon from '../icons/closeIcon/CloseIcon';
+import HamburgerIcon from '../icons/hamburegerIcon/HamburgerIcon';
 
 const NavBar: React.FC = ({}) => {
     const [sidebar, setSidebar] = useState(false);
@@ -21,11 +21,9 @@ const NavBar: React.FC = ({}) => {
     return (
         <div>
             <div className={styles["container"]}>
-                {NavbarData.map((item, index) => {
-                    return (
-                        <Button key={index} className={styles["navItem"]} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
-                    )
-                })}
+                {NavbarData.map((item, index) => 
+                    <Button key={index} className={styles["navItem"]} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
+                )}
             </div>
             <div className={clsx(styles["sidebarBackdrop"], sidebar ? styles["sidebarBackdropShow"] : "")} onClick={toggleSidebar}></div>
             <div className={styles["mobileContainer"]}>
@@ -38,11 +36,9 @@ const NavBar: React.FC = ({}) => {
                         <CloseIcon className={styles["sidebarIcon"]} onClick={toggleSidebar}/>
                     </div>
                     <div className={styles["sidebarMenu"]}>
-                        {NavbarData.map((item, index) => {
-                            return (
-                                <Button key={index} className={styles["navItem"]} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
-                            )
-                        })}
+                        {NavbarData.map((item, index) => 
+                            <Button key={index} className={styles["navItem"]} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
+                        )}
                     </div>         
                 </div>
             </div>

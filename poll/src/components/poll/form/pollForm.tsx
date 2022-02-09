@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import Button from "../../button/button";
-import styles from "./pollForm.module.scss"
+import Button from "../../button/Button";
+import styles from "./PollForm.module.scss"
 
 interface PollData {
     question: string;
