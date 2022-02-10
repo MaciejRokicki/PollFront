@@ -1,27 +1,11 @@
 @import "colors.scss";
 
-$header-padding: 70px;
 
 .main {
   height: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  align-items: center;
-}
-
-.header {
-  width: calc(100% - 2 * $header-padding);
-  padding: $header-padding;
-  background-color: $fuelYellow;
-  display: flex;
-  justify-content: center;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
@@ -50,17 +34,21 @@ section {
 }
 
 .pollBlock {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: $creamBrulee;
+}
+
+.pollTitle {
+  text-align: center;
 }
 
 .poll {
-  width: 600px;
+  width: 700px;
   margin: 5px;
   padding: 5px 15px 15px;
-  background-color: $creamBrulee;
-  border-radius: 10px;
 }
 
 @media only screen and (max-width: 768px) {

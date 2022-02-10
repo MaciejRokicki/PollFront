@@ -15,29 +15,35 @@ const NavBar: React.FC = ({}) => {
 
     const navigateHandler = (path: string) => {
         navigate(path);
-        toggleSidebar();
+        setSidebar(false);
     }
 
+    window.addEventListener("resize", () => {
+        if(sidebar && window.innerWidth > 600) {
+            setSidebar(false);
+        }
+    })
+
     return (
-        <div>
-            <div className={styles["container"]}>
+        <div className={styles.navbar}>
+            <div className={styles.container}>
                 {NavbarData.map((item, index) => 
-                    <Button key={index} className={styles["navItem"]} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
+                    <Button key={index} className={styles.navItem} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
                 )}
             </div>
-            <div className={clsx(styles["sidebarBackdrop"], sidebar ? styles["sidebarBackdropShow"] : "")} onClick={toggleSidebar}></div>
-            <div className={styles["mobileContainer"]}>
-                <HamburgerIcon className={styles["sidebarIcon"]} onClick={toggleSidebar}/>
-                <div className={clsx(styles["sidebar"], sidebar ? styles["sidebarOpen"] : styles["sidebarClose"])}>
-                    <div className={styles["sidebarTopbar"]}>
-                        <div className={styles["sidebarTitle"]}>
+            <div className={clsx(styles.sidebarBackdrop, sidebar ? styles.sidebarBackdropShow : "")} onClick={toggleSidebar}></div>
+            <div className={styles.mobileContainer}>
+                <HamburgerIcon className={styles.sidebarIcon} onClick={toggleSidebar}/>
+                <div className={clsx(styles.sidebar, sidebar ? styles.sidebarOpen : styles.sidebarClose)}>
+                    <div className={styles.sidebarTopbar}>
+                        <div className={styles.sidebarTitle}>
                             Poll
                         </div>
-                        <CloseIcon className={styles["sidebarIcon"]} onClick={toggleSidebar}/>
+                        <CloseIcon className={styles.sidebarIcon} onClick={toggleSidebar}/>
                     </div>
-                    <div className={styles["sidebarMenu"]}>
+                    <div className={styles.sidebarMenu}>
                         {NavbarData.map((item, index) => 
-                            <Button key={index} className={styles["navItem"]} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
+                            <Button key={index} className={styles.navItem} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
                         )}
                     </div>         
                 </div>

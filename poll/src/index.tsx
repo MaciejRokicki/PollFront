@@ -13,6 +13,14 @@ ReactDOM.render(
   <React.StrictMode>
       <BrowserRouter>
         <NavBar />
+        <div className="header">
+          <div className="container">
+            <h1>Poll</h1>
+            <div>
+              <h2>Twórz ankiety bez zakładania konta</h2>
+            </div>
+          </div>
+        </div>
         <Routes>
           <Route path="/" element={<App/>} />
           <Route path="signIn" element={<SignIn/>} />

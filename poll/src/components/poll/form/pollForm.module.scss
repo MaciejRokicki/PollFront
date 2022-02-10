@@ -1,9 +1,4 @@
-.content {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: flex-start;
-}
+@import "../../../colors.scss";
 
 .errorLabel {
     margin: 0px 0px 5px 0px;
@@ -13,12 +8,24 @@
     width: calc(100% - 23px);
     height: 30px;
     margin: 0px 5px 5px;
+    background-color: $brightSun;
     border: none;
     border-radius: 5px;
-    padding: 0px 5px;
+    padding: 0px 10px;
+}
+
+.pollInput:focus {
+    outline: none;
+}
+
+.questionInput {
+    height: 50px;
+    font-size: 26px;
 }
 
 .saveButton {
     width: 100px;
-    margin: 10px 0px 0px 0px;
+    height: 30px;
+    margin: 10px 0px 0px 5px;
+    font-weight: bold;
 }

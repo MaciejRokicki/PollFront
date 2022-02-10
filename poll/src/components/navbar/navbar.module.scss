@@ -1,5 +1,9 @@
 @import "../../colors.scss";
 
+.navbar {
+    background-color: $fuelYellow;
+}
+
 .container {
     padding: 20px 15px;
     color: whitesmoke;
@@ -9,9 +13,6 @@
     justify-content: flex-start;
 }
 
-.mobileContainer {
-    display: none;
-}
 
 .sidebarBackdrop {
     position: fixed;
@@ -25,7 +26,7 @@
 
 .sidebar {
     position: absolute;
-    height: 100%;
+    height: calc(100% - 59px);
     width: 80%;
     top: 0px;
     left: -100%;
@@ -34,6 +35,61 @@
 
 .navItem {
     margin: 5px;
+}
+
+.mobileContainer {
+    display: block;
+    align-items: center;
+    width: 100%;
+    height: 59px;
+    color: whitesmoke;
+    background-color: $fuelYellow;
+    visibility: hidden;
+    transition: visibility 1s;
+}
+
+.sidebarBackdropShow {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebarOpen {
+    transform: translateX(125%);
+}
+
+.sidebarClose {
+    transform: translateX(0px);
+}
+
+.sidebarTopbar {
+    height: 59px;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebarTitle {
+    font-size: 26px;
+    color: black;
+    margin: 0px 0px 0px 10px;
+}
+
+.sidebarIcon {
+    margin: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.sidebarMenu {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: whitesmoke;
 }
 
 @media only screen and (min-width: 599px) and (max-width: 768px) {
@@ -49,56 +105,7 @@
     }
 
     .mobileContainer {
-        display: block;
-        align-items: center;
-        width: 100%;
-        height: 59px;
-        color: whitesmoke;
-        background-color: $fuelYellow;
-    }
-
-    .sidebarBackdropShow {
-        opacity: 1;
         visibility: visible;
-    }
-
-    .sidebarOpen {
-        transform: translateX(125%);
-    }
-
-    .sidebarClose {
-        transform: translateX(0px);
-    }
-
-    .sidebarTopbar {
-        height: 59px;
-        width: 100%;
-        background-color: white;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .sidebarTitle {
-        font-size: 26px;
-        color: black;
-        margin: 0px 0px 0px 10px;
-    }
-
-    .sidebarIcon {
-        margin: 10px;
-        padding: 10px;
-        cursor: pointer;
-    }
-
-    .sidebarMenu {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: flex-start;
-        background-color: whitesmoke;
     }
 
     .navItem {

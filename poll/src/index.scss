@@ -1,3 +1,7 @@
+@import "./colors.scss";
+
+$header-padding: 40px;
+
 html {
   height: 100%;
   background-color: white;
@@ -16,7 +20,22 @@ body {
 #root {
   height: 100%;
   display: grid;
-  grid-template-rows: 74px auto 120px;
+  grid-template-rows: 74px 300px auto 80px;
+}
+
+.header {
+  width: calc(100% - 2 * $header-padding);
+  padding: $header-padding;
+  background-color: $fuelYellow;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 code {
@@ -27,6 +46,6 @@ code {
 @media only screen and (max-width: 768px) {
   #root {
     height: 100%;
-    grid-template-rows: 59px auto 120px;
+    grid-template-rows: 59px 250px auto 80px;
   }
 }
