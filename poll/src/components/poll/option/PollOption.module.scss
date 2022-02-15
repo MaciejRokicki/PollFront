@@ -1,0 +1,39 @@
+@import "../../../colors.scss";
+
+$inputHeight: 30px;
+$padding: 10px;
+
+.container {
+    display: block;
+    position: relative;
+    min-height: $inputHeight;
+    font-size: 22px;
+    margin: 5px 0px;
+}
+
+.pollOption {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    cursor: pointer;
+}
+
+.pollLabel {
+    display: flex;
+    height: 100%;
+    background-color: $creamBrulee;
+    border-radius: 10px;
+    padding: $padding;
+    align-items: center;
+    overflow-wrap: anywhere;
+}
+
+.container:hover > .pollLabel {
+    background-color: $goldenrod;
+}
+
+input:checked + .pollLabel {
+    background-color: $fuelYellow;
+}

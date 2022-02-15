@@ -21,6 +21,7 @@
     background-color: rgba(0, 0, 0, .6);
     opacity: 0;
     visibility: hidden;
+    z-index: 1000;
     transition: opacity 0.5s;
 }
 
@@ -30,6 +31,7 @@
     width: 80%;
     top: 0px;
     left: -100%;
+    z-index: 1000;
     transition: transform 0.5s;
 }
 

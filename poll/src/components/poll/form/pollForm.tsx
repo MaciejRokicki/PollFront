@@ -1,24 +1,18 @@
 import clsx from "clsx";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { PollCreateModel } from "../../../entities/poll/create/IPollCreateModel";
 import Button from "../../button/Button";
 import styles from "./PollForm.module.scss"
 
-interface PollData {
-    question: string;
-    options: {
-        value: string
-    }[];
-}
-
 const PollForm: React.FC = ({}) => {
-    const { register, control, handleSubmit, watch, formState: { errors } } = useForm<PollData>({
+    const { register, control, handleSubmit, watch, formState: { errors } } = useForm<PollCreateModel>({
         defaultValues: {
             question: "",
             options: [
-                { value: "" }, 
-                { value: "" }, 
-                { value: "" }
+                { option: "" }, 
+                { option: "" }, 
+                { option: "" }
             ]
         }
     });
@@ -28,14 +22,14 @@ const PollForm: React.FC = ({}) => {
         name: "options"
     });
 
-    const createPoll = (data: PollData) => {
-        console.log(data)
+    const createPoll = (pollCreateModel: PollCreateModel) => {
+        console.log(pollCreateModel)
     }
 
     const optionsWatcher = watch("options");
 
     useEffect(() => {
-        if(optionsWatcher[optionsWatcher.length - 1].value !== "") {
+        if(optionsWatcher[optionsWatcher.length - 1].option !== "") {
             append({}, {shouldFocus: false});
         }
     })
@@ -51,7 +45,7 @@ const PollForm: React.FC = ({}) => {
                     key={field.id}
                     type="text"
                     placeholder="Podaj treść odpowiedzi"
-                    {...register(`options.${index}.value`)} />
+                    {...register(`options.${index}.option`)} />
             ))}
             <Button type="submit" className={styles.saveButton} variant="darkRed">Stwórz</Button>
         </form>

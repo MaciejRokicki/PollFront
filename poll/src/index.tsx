@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './index.scss';
 import NavBar from './components/navbar/Navbar';
 import App from './App';
 import SignIn from './views/signIn/signIn';
 import SignUp from './views/signUp/signUp';
 import Footer from './components/footer/Footer';
+import Poll from './views/poll/home/poll';
+import PollResult from './views/poll/result/result';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -22,9 +24,12 @@ ReactDOM.render(
           </div>
         </div>
         <Routes>
-          <Route path="/" element={<App/>} />
-          <Route path="signIn" element={<SignIn/>} />
-          <Route path="signUp" element={<SignUp/>} />
+          <Route path="/" element={<App />} />
+          <Route path="signIn" element={<SignIn />} />
+          <Route path="signUp" element={<SignUp />} />
+          <Route path="poll" element={<Navigate to="/" />} />
+          <Route path="poll/:id" element={<Poll />} />
+          <Route path="poll/:id/result" element={<PollResult />} />
         </Routes>
         <Footer/>
       </BrowserRouter>
