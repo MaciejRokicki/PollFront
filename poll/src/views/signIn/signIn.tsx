@@ -28,7 +28,7 @@ const SignIn = () => {
     }
 
     return (
-        <main>
+        <main className={styles.main}>
             <section className={styles.signInBlock}>
                 <h2 className={styles.signInTitle}>Zaloguj się</h2>
                 <form onSubmit={handleSubmit(handleSignIn)} className={styles.signInForm}>

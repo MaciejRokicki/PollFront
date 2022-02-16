@@ -1,0 +1,56 @@
+@import "../../colors.scss";
+
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: $brightSun;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.rowHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px 0px;
+    background-color: $fuelYellow;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px 0px;
+}
+
+.row:hover, .row:nth-child(even):hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
+    cursor: pointer;
+}
+
+.row:nth-child(even) {
+    background-color: $goldenrod;
+}
+
+.row:last-child {
+    border-radius: 0px 0px 10px 10px;
+}
+
+.rowNoData {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 10px 0px;
+    font-weight: bold;
+}
+
+.cell {
+    padding: 0px 5px;
+    width: 100%;
+    text-align: center;
+}
+
+.cellHeader {
+    font-weight: bold;
+}

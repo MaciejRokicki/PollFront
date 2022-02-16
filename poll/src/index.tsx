@@ -10,6 +10,7 @@ import SignUp from './views/signUp/signUp';
 import Footer from './components/footer/Footer';
 import Poll from './views/poll/home/poll';
 import PollResult from './views/poll/result/result';
+import MyPolls from './views/myPolls/myPolls';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -27,6 +28,7 @@ ReactDOM.render(
           <Route path="/" element={<App />} />
           <Route path="signIn" element={<SignIn />} />
           <Route path="signUp" element={<SignUp />} />
+          <Route path="MyPolls" element={<MyPolls />} />
           <Route path="poll" element={<Navigate to="/" />} />
           <Route path="poll/:id" element={<Poll />} />
           <Route path="poll/:id/result" element={<PollResult />} />

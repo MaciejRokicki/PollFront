@@ -31,7 +31,7 @@ const SignUp = () => {
     }
 
     return (
-        <main>
+        <main className={styles.main}>
             <section className={styles.signUpBlock}>
                 <h2 className={styles.signUpTitle}>Zarejestruj się</h2>
                 <form onSubmit={handleSubmit(handleSignIn)} className={styles.signUpForm}>
