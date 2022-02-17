@@ -13,7 +13,9 @@ interface Poll {
 
 const MyPolls = () => {
     const navigate = useNavigate();
-    const drafts: Poll[] = [];
+    const drafts: Poll[] = [
+        {id: 1, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 1" },
+    ];
     const polls: Poll[] = [
         {id: 1, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 1" },
         {id: 2, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 2" },
@@ -22,12 +24,16 @@ const MyPolls = () => {
         {id: 5, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 5" },
     ]
 
+    const navigateToEditPollHandler = (id: number) => {
+        navigate(`/poll/${id}/edit`);
+    }
+
     const navigateToPollHandler = (id: number) => {
         navigate(`/poll/${id}`)
     }
 
     return (
-        <main className={styles.main}>
+        <div className={styles.container}>
             <section className={styles.section}>
                 <div className={styles.tableContainer}>
                     <h2>Ankiety zapisane na później</h2>
@@ -35,7 +41,7 @@ const MyPolls = () => {
                         headers={["Pytanie", "Data utworzenia", "Data zakończenia"]} 
                         columns={["question", "created", "endDate"]} 
                         data={drafts} 
-                        onClickCallback={navigateToPollHandler} />
+                        onClickCallback={navigateToEditPollHandler} />
                 </div>
             </section>
             <section className={clsx(styles.section, styles.pollsSection)}>
@@ -48,7 +54,7 @@ const MyPolls = () => {
                         onClickCallback={navigateToPollHandler} />
                 </div>
             </section>
-        </main>
+        </div>
     )
 }
 

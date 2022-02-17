@@ -3,18 +3,15 @@ import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { PollCreateModel } from "../../../entities/poll/create/IPollCreateModel";
 import Button from "../../button/Button";
-import styles from "./PollForm.module.scss"
+import styles from "./EditPollForm.module.scss"
 
-const PollForm: React.FC = ({}) => {
+interface Props {
+    pollCreateModel: PollCreateModel
+}
+
+const EditPollForm: React.FC<Props> = (props) => {
     const { register, control, handleSubmit, watch, formState: { errors } } = useForm<PollCreateModel>({
-        defaultValues: {
-            question: "",
-            options: [
-                { option: "" }, 
-                { option: "" }, 
-                { option: "" }
-            ]
-        }
+        defaultValues: props.pollCreateModel
     });
 
     const { fields, append } = useFieldArray({
@@ -26,6 +23,10 @@ const PollForm: React.FC = ({}) => {
         console.log(pollCreateModel)
     }
 
+    const savePoll = (pollCreateModel: PollCreateModel) => {
+        console.log(pollCreateModel);
+    }
+
     const optionsWatcher = watch("options");
 
     useEffect(() => {
@@ -35,7 +36,7 @@ const PollForm: React.FC = ({}) => {
     })
 
     return (
-        <form onSubmit={handleSubmit(createPoll)}>
+        <form onSubmit={handleSubmit(savePoll)}>
             {errors.question && <div className={styles.errorLabel}>Musisz podać podać treść pytania.</div>}
             <input className={clsx(styles.pollInput, styles.questionInput)} 
                    placeholder="Podaj treść pytania" 
@@ -47,9 +48,10 @@ const PollForm: React.FC = ({}) => {
                     placeholder="Podaj treść odpowiedzi"
                     {...register(`options.${index}.option`)} />
             ))}
-            <Button type="submit" className={styles.saveButton} variant="darkRed">Stwórz</Button>
+            <Button type="button" className={styles.saveButton} variant="darkRed" onClick={handleSubmit(createPoll)}>Stwórz</Button>
+            <Button type="submit" className={styles.saveButton} variant="darkRed">Zapisz</Button>
         </form>
     );
 }
 
-export default PollForm;
+export default EditPollForm;

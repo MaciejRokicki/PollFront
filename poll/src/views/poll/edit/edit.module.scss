@@ -1,0 +1,19 @@
+@import "../../../colors.scss";
+
+.pollBlock {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $creamBrulee;
+  }
+  
+  .pollTitle {
+    text-align: center;
+  }
+  
+  .poll {
+    width: 700px;
+    margin: 5px;
+    padding: 5px 15px 15px;
+  }

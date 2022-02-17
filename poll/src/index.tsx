@@ -11,6 +11,7 @@ import Footer from './components/footer/Footer';
 import Poll from './views/poll/home/poll';
 import PollResult from './views/poll/result/result';
 import MyPolls from './views/myPolls/myPolls';
+import EditPoll from './views/poll/edit/edit';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -32,6 +33,7 @@ ReactDOM.render(
           <Route path="poll" element={<Navigate to="/" />} />
           <Route path="poll/:id" element={<Poll />} />
           <Route path="poll/:id/result" element={<PollResult />} />
+          <Route path="poll/:id/edit" element={<EditPoll />} />
         </Routes>
         <Footer/>
       </BrowserRouter>

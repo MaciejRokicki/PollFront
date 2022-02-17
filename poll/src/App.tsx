@@ -1,5 +1,5 @@
 import styles from './App.module.scss';
-import PollForm from './components/poll/form/PollForm';
+import CreatePollForm from './components/poll/createForm/CreatePollForm';
 
 function App() {
   return (
@@ -42,7 +42,7 @@ function App() {
         <section className={styles.pollBlock}>
           <div className={styles.poll}>
             <h1 className={styles.pollTitle}>Stwórz nową ankietę</h1>
-            <PollForm></PollForm>
+            <CreatePollForm />
           </div>
         </section>
       </main>
