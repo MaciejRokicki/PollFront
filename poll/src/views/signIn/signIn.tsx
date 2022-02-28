@@ -25,10 +25,10 @@ const SignIn = () => {
         resolver: yupResolver(schema),
     })
 
-    const authContext = useContext(AuthContext);
+    const {signIn} = useContext(AuthContext);
 
     const handleSignIn = (data: SignInData) => {
-        authContext.signIn(data.email, data.password);
+        signIn(data.email, data.password);
     }
 
     return (
