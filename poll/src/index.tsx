@@ -13,7 +13,7 @@ import PollResult from './views/poll/result/result';
 import MyPolls from './views/myPolls/myPolls';
 import EditPoll from './views/poll/edit/edit';
 import ProtectedRoute from './utils/ProtectedRoute';
-import { AuthProvider } from './contexts/auth.context';
+import AuthProvider from './contexts/auth.context';
 
 ReactDOM.render(
   <React.StrictMode>

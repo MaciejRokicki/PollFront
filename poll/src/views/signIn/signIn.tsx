@@ -3,7 +3,8 @@ import Button from "../../components/button/Button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./signIn.module.scss";
-import { useAuth } from "../../contexts/auth.context";
+import { AuthContext } from "../../contexts/auth.context";
+import { useContext } from "react";
 
 interface SignInData {
     email: string,
@@ -24,10 +25,10 @@ const SignIn = () => {
         resolver: yupResolver(schema),
     })
 
-    const {dispatch} = useAuth();
+    const authContext = useContext(AuthContext);
 
     const handleSignIn = (data: SignInData) => {
-        dispatch({type: "signIn"});
+        authContext.signIn(data.email, data.password);
     }
 
     return (

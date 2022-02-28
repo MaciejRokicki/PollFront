@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../button/Button';
 import styles from './Navbar.module.scss';
-import { NavbarData } from './NavbarData';
-import { useState } from 'react';
+import { NavbarData, SignedNavbarData } from './NavbarData';
+import { useContext, useState } from 'react';
 import clsx from 'clsx';
 import CloseIcon from '../icons/closeIcon/CloseIcon';
 import HamburgerIcon from '../icons/hamburegerIcon/HamburgerIcon';
+import { AuthContext } from '../../contexts/auth.context';
+import { NavbarItem } from './INavbarItem';
 
 const NavBar: React.FC = ({}) => {
     const [sidebar, setSidebar] = useState(false);
@@ -24,10 +26,14 @@ const NavBar: React.FC = ({}) => {
         }
     })
 
+    const authContext = useContext(AuthContext);
+
+    const navbarData: NavbarItem[] = authContext.isAuthenticated ? SignedNavbarData : NavbarData;
+
     return (
         <div className={styles.navbar}>
             <div className={styles.container}>
-                {NavbarData.map((item, index) => 
+                {navbarData.map((item, index) => 
                     <Button key={index} className={styles.navItem} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
                 )}
             </div>
@@ -42,7 +48,7 @@ const NavBar: React.FC = ({}) => {
                         <CloseIcon className={styles.sidebarIcon} onClick={toggleSidebar}/>
                     </div>
                     <div className={styles.sidebarMenu}>
-                        {NavbarData.map((item, index) => 
+                        {navbarData.map((item, index) => 
                             <Button key={index} className={styles.navItem} onClick={() => navigateHandler(item.path)} variant={item.variant}>{item.name}</Button>
                         )}
                     </div>         

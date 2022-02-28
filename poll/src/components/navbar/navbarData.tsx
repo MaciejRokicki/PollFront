@@ -15,3 +15,11 @@ export const NavbarData: NavbarItem[] = [
         path: "/signUp"
     },
 ]
+
+export const SignedNavbarData: NavbarItem[] = [
+    ...NavbarData,
+    {
+        name: "Wyloguj się",
+        path: "/signout"
+    }
+]
