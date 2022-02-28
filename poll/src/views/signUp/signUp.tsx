@@ -3,6 +3,7 @@ import Button from "../../components/button/Button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./signUp.module.scss";
+import { useAuth } from "../../contexts/auth.context";
 
 interface SignUpData {
     email: string,
@@ -26,8 +27,11 @@ const SignUp = () => {
         resolver: yupResolver(schema),
     })
 
+    const {dispatch} = useAuth();
+
     const handleSignIn = (data: SignUpData) => {
         console.log(data);
+        dispatch({type: "signUp"});
     }
 
     return (

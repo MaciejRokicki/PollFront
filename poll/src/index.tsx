@@ -13,30 +13,33 @@ import PollResult from './views/poll/result/result';
 import MyPolls from './views/myPolls/myPolls';
 import EditPoll from './views/poll/edit/edit';
 import ProtectedRoute from './utils/ProtectedRoute';
+import { AuthProvider } from './contexts/auth.context';
 
 ReactDOM.render(
   <React.StrictMode>
       <BrowserRouter>
-        <NavBar />
-        <div className="header">
-          <div className="container">
-            <h1>Poll</h1>
-            <div>
-              <h2>Twórz ankiety bez zakładania konta</h2>
+        <AuthProvider>
+          <NavBar />
+          <div className="header">
+            <div className="container">
+              <h1>Poll</h1>
+              <div>
+                <h2>Twórz ankiety bez zakładania konta</h2>
+              </div>
             </div>
           </div>
-        </div>
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route path="signIn" element={<SignIn />} />
-          <Route path="signUp" element={<SignUp />} />
-          <Route path="MyPolls" element={<ProtectedRoute {...{isAuthenticated: true, authentiactionPath: "/signIn", target: <MyPolls />}} />} />
-          <Route path="poll" element={<Navigate to="/" />} />
-          <Route path="poll/:id" element={<Poll />} />
-          <Route path="poll/:id/result" element={<PollResult />} />
-          <Route path="poll/:id/edit" element={<EditPoll />} />
-        </Routes>
-        <Footer/>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="signIn" element={<SignIn />} />
+            <Route path="signUp" element={<SignUp />} />
+            <Route path="MyPolls" element={<ProtectedRoute {...{isAuthenticated: true, authentiactionPath: "/signIn", target: <MyPolls />}} />} />
+            <Route path="poll" element={<Navigate to="/" />} />
+            <Route path="poll/:id" element={<Poll />} />
+            <Route path="poll/:id/result" element={<PollResult />} />
+            <Route path="poll/:id/edit" element={<EditPoll />} />
+          </Routes>
+          <Footer/>
+        </AuthProvider>
       </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
