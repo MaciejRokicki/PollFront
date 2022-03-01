@@ -15,33 +15,37 @@ import EditPoll from './views/poll/edit/edit';
 import ProtectedRoute from './utils/ProtectedRoute';
 import AuthProvider from './contexts/auth.context';
 import SignOut from './views/signOut/signOut';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 
 ReactDOM.render(
   <React.StrictMode>
       <BrowserRouter>
-        <AuthProvider>
-          <NavBar />
-          <div className="header">
-            <div className="container">
-              <h1>Poll</h1>
-              <div>
-                <h2>Twórz ankiety bez zakładania konta</h2>
+        <Provider store={store}>
+          <AuthProvider>
+            <NavBar />
+            <div className="header">
+              <div className="container">
+                <h1>Poll</h1>
+                <div>
+                  <h2>Twórz ankiety bez zakładania konta</h2>
+                </div>
               </div>
             </div>
-          </div>
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="signIn" element={<SignIn />} />
-            <Route path="signUp" element={<SignUp />} />
-            <Route path="/signOut" element={<ProtectedRoute {...{authentiactionPath: "/", target: <SignOut />}} />} /> 
-            <Route path="MyPolls" element={<ProtectedRoute {...{authentiactionPath: "/signIn", target: <MyPolls />}} />} />
-            <Route path="poll" element={<Navigate to="/" />} />
-            <Route path="poll/:id" element={<Poll />} />
-            <Route path="poll/:id/result" element={<PollResult />} />
-            <Route path="poll/:id/edit" element={<EditPoll />} />
-          </Routes>
-          <Footer/>
-        </AuthProvider>
+            <Routes>
+              <Route path="/" element={<App />} />
+              <Route path="signIn" element={<SignIn />} />
+              <Route path="signUp" element={<SignUp />} />
+              <Route path="/signOut" element={<ProtectedRoute {...{authentiactionPath: "/", target: <SignOut />}} />} /> 
+              <Route path="MyPolls" element={<ProtectedRoute {...{authentiactionPath: "/signIn", target: <MyPolls />}} />} />
+              <Route path="poll" element={<Navigate to="/" />} />
+              <Route path="poll/:id" element={<Poll />} />
+              <Route path="poll/:id/result" element={<PollResult />} />
+              <Route path="poll/:id/edit" element={<EditPoll />} />
+            </Routes>
+            <Footer/>
+          </AuthProvider>
+        </Provider>
       </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
