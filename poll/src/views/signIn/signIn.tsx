@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./signIn.module.scss";
 import { AuthContext } from "../../contexts/auth.context";
 import { useContext } from "react";
+import { useNavigate } from "react-router";
 
 interface SignInData {
     email: string,
@@ -26,9 +27,11 @@ const SignIn = () => {
     })
 
     const {signIn} = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleSignIn = (data: SignInData) => {
         signIn(data.email, data.password);
+        navigate("/MyPolls");
     }
 
     return (

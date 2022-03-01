@@ -4,4 +4,6 @@ export interface NavbarItem {
     name: string;
     path: string;
     variant?: ButtonVariant;
+    signRequired?: boolean;
+    hideAfterSigned?: boolean
 }

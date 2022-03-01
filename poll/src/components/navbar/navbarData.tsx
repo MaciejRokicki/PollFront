@@ -7,19 +7,23 @@ export const NavbarData: NavbarItem[] = [
         variant: "white"
     },
     {
+        name: "Moje ankiety",
+        path: "MyPolls",
+        signRequired: true,
+    },
+    {
         name: "Zaloguj się",
-        path: "/signIn"
+        path: "/signIn",
+        hideAfterSigned: true,
     },
     {
         name: "Zarejestruj się",
-        path: "/signUp"
+        path: "/signUp",
+        hideAfterSigned: true,
     },
-]
-
-export const SignedNavbarData: NavbarItem[] = [
-    ...NavbarData,
     {
         name: "Wyloguj się",
-        path: "/signout"
+        path: "/signout",
+        signRequired: true
     }
 ]

@@ -14,6 +14,7 @@ import MyPolls from './views/myPolls/myPolls';
 import EditPoll from './views/poll/edit/edit';
 import ProtectedRoute from './utils/ProtectedRoute';
 import AuthProvider from './contexts/auth.context';
+import SignOut from './views/signOut/signOut';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -32,7 +33,8 @@ ReactDOM.render(
             <Route path="/" element={<App />} />
             <Route path="signIn" element={<SignIn />} />
             <Route path="signUp" element={<SignUp />} />
-            <Route path="MyPolls" element={<ProtectedRoute {...{isAuthenticated: true, authentiactionPath: "/signIn", target: <MyPolls />}} />} />
+            <Route path="/signOut" element={<ProtectedRoute {...{authentiactionPath: "/", target: <SignOut />}} />} /> 
+            <Route path="MyPolls" element={<ProtectedRoute {...{authentiactionPath: "/signIn", target: <MyPolls />}} />} />
             <Route path="poll" element={<Navigate to="/" />} />
             <Route path="poll/:id" element={<Poll />} />
             <Route path="poll/:id/result" element={<PollResult />} />

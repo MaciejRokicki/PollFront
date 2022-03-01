@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../button/Button';
 import styles from './Navbar.module.scss';
-import { NavbarData, SignedNavbarData } from './NavbarData';
+import { NavbarData } from './NavbarData';
 import { useContext, useState } from 'react';
 import clsx from 'clsx';
 import CloseIcon from '../icons/closeIcon/CloseIcon';
@@ -28,7 +28,16 @@ const NavBar: React.FC = ({}) => {
 
     const authContext = useContext(AuthContext);
 
-    const navbarData: NavbarItem[] = authContext.isAuthenticated ? SignedNavbarData : NavbarData;
+    const navbarData: NavbarItem[] = NavbarData.filter((navbarItem: NavbarItem) => {
+        if(navbarItem.signRequired !== undefined && navbarItem.signRequired !== authContext.isAuthenticated) 
+            return false;
+
+        if(navbarItem.hideAfterSigned === true && authContext.isAuthenticated) {
+            return false;
+        }
+
+        return true;
+    })
 
     return (
         <div className={styles.navbar}>
