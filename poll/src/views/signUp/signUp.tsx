@@ -3,6 +3,12 @@ import Button from "../../components/button/Button";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./signUp.module.scss";
+import http from "../../utils/Http";
+import { SignUpRequest } from "../../entities/authentication/SignUpRequest";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ResponseExceptions } from "../../utils/ResponseExceptions";
+import { apiUrl } from "../../api";
 
 interface SignUpData {
     email: string,
@@ -26,20 +32,34 @@ const SignUp = () => {
         resolver: yupResolver(schema),
     })
 
-    const handleSignIn = (data: SignUpData) => {
-        console.log(data);
+    const [responseErrors, setResponseErrors] = useState<string>("");
+    const [successfulSignUpMsg, setSuccessfulSignUpMsg] = useState<boolean>(false);
+
+    const handleSignUp = async (data: SignUpData) => {
+        try {
+            await http.post(`${apiUrl}/Authentication/SignUp`, { email: data.email, password: data.password } as SignUpRequest);
+            setSuccessfulSignUpMsg(true)
+        } catch(exception) {
+            setResponseErrors(ResponseExceptions.TranslateException(await exception as string))
+        }
     }
 
     return (
         <main className={styles.main}>
             <section className={styles.signUpBlock}>
                 <h2 className={styles.signUpTitle}>Zarejestruj się</h2>
-                <form onSubmit={handleSubmit(handleSignIn)} className={styles.signUpForm}>
-                    {(errors.email || errors.password || errors.confirmPassword) &&
+                <form onSubmit={handleSubmit(handleSignUp)} className={styles.signUpForm}>
+                    {(successfulSignUpMsg) &&
+                        <ul className={styles.error}>
+                            <li>Twoje konto zostało założone, możesz się teraz <Link to={"/SignIn"}>zalogować.</Link></li>
+                        </ul>
+                    }
+                    {(errors.email || errors.password || errors.confirmPassword || responseErrors) &&
                         <ul className={styles.error}>
                             {errors.email && <li className={styles.errorLabel}>{errors.email.message}</li>}
                             {errors.password && <li className={styles.errorLabel}>{errors.password.message}</li>}
                             {errors.confirmPassword && <li className={styles.errorLabel}>{errors.confirmPassword.message}</li>}
+                            {responseErrors && <li className={styles.errorLabel}>{responseErrors}</li>}
                         </ul>
                     }
                     <label htmlFor="femail" 

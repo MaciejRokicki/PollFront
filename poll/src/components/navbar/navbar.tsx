@@ -9,7 +9,7 @@ import HamburgerIcon from '../icons/hamburegerIcon/HamburgerIcon';
 import { AuthContext } from '../../contexts/auth.context';
 import { NavbarItem } from './INavbarItem';
 
-const NavBar: React.FC = ({}) => {
+const NavBar: React.FC = () => {
     const [sidebar, setSidebar] = useState(false);
     let navigate = useNavigate();
 

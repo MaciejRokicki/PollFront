@@ -4,8 +4,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styles from "./signIn.module.scss";
 import { AuthContext } from "../../contexts/auth.context";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router";
+import { ResponseExceptions } from "../../utils/ResponseExceptions";
 
 interface SignInData {
     email: string,
@@ -26,12 +27,19 @@ const SignIn = () => {
         resolver: yupResolver(schema),
     })
 
-    const {signIn} = useContext(AuthContext);
+    const { signIn } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const handleSignIn = (data: SignInData) => {
-        signIn(data.email, data.password);
-        navigate("/MyPolls");
+    const [responseErrors, setResponseErrors] = useState<string>("");
+
+    const handleSignIn = async (data: SignInData) => {
+        try {
+            await signIn(data.email, data.password);
+            navigate("/MyPolls");
+        } 
+        catch (exception) {
+            setResponseErrors(ResponseExceptions.TranslateException(await exception as string))
+        }
     }
 
     return (
@@ -39,10 +47,11 @@ const SignIn = () => {
             <section className={styles.signInBlock}>
                 <h2 className={styles.signInTitle}>Zaloguj się</h2>
                 <form onSubmit={handleSubmit(handleSignIn)} className={styles.signInForm}>
-                    {(errors.email || errors.password) &&
+                    {(errors.email || errors.password || responseErrors) &&
                         <ul className={styles.error}>
                             {errors.email && <li className={styles.errorLabel}>{errors.email.message}</li>}
                             {errors.password && <li className={styles.errorLabel}>{errors.password.message}</li>}
+                            {responseErrors && <li className={styles.errorLabel}>{responseErrors}</li>}
                         </ul>
                     }
                     <label htmlFor="femail" className={styles.label}>Adres email</label>

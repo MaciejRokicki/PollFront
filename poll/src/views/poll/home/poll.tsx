@@ -1,67 +1,95 @@
+import { useContext, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+import { apiUrl } from "../../../api";
 import Button from "../../../components/button/Button";
 import PollOption from "../../../components/poll/option/PollOption";
-import { PollAnswer } from "../../../entities/poll/IPollAnswer";
+import { AuthContext } from "../../../contexts/auth.context";
+import { PollModel } from "../../../entities/poll/PollModel";
+import { VotePollModel } from "../../../entities/poll/VotePollModel";
+import http from "../../../utils/Http";
 import styles from "./poll.module.scss";
 
 interface PollOptionFrontModel {
     id: number;
     option: string;
     isSelected?: boolean;
+
+    // constructor(id: number, option: string, isSelected?: boolean) {
+    //     this.Id = id;
+    //     this.Option = option;
+    //     this.IsSelected = isSelected;
+    // }
 }
 
 interface PollAnswerFrontModel {
     id: number;
     question: string;
     options: PollOptionFrontModel[];
+
+    // constructor(id: number, question: string, options: PollOptionFrontModel[]) {
+    //     this.Id = id;
+    //     this.Question = question;
+    //     this.Options = options;
+    // }
 }
 
 const Poll = () => {
     let { id } = useParams();
-    let navigate = useNavigate();
+    let navigate = useNavigate();    
+    const { token } = useContext(AuthContext);
+    const [poll, setPoll] = useState<PollModel>();
 
-    const { register, control, handleSubmit, getValues } = useForm<PollAnswerFrontModel>({
-        defaultValues: {
-            id: 1,
-            question: "Pytanie - TESTsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-            options: [
-                { id: 1, option: "Opcja 1", isSelected: false },
-                { id: 2, option: "Opcja 2", isSelected: false },
-                { id: 3, option: "Opcja 3ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss", isSelected: false },
-                { id: 4, option: "Opcja 4", isSelected: false },
-                { id: 5, option: "Opcja 5", isSelected: false },
-                { id: 6, option: "Opcja 5", isSelected: false },
-                { id: 7, option: "Opcja 5", isSelected: false },
-                { id: 8, option: "Opcja 5", isSelected: false },
-                { id: 9, option: "Opcja 5", isSelected: false },
-                { id: 10, option: "Opcja 5", isSelected: false },
-                { id: 11, option: "Opcja 5", isSelected: false },
-                { id: 12, option: "Opcja 5", isSelected: false }
-            ]
-        }
-    })
+    const { register, control, handleSubmit, getValues, reset } = useForm<PollAnswerFrontModel>()
 
     const { fields } = useFieldArray({
         control,
         name: "options"
     })
 
-    const vote = (pollAnswerFrontModel: PollAnswerFrontModel) => {
-        let pollAnswer: PollAnswer = {
+    useEffect(() => {
+        const getPoll = async (id: string) => {
+            if(id !== undefined) {
+                const response: any = await http.get(`${apiUrl}/Poll/Get`, { id: id });
+    
+                if(response?.Error) {
+                    console.log(response.Error);
+                } else {
+                    const pollModel = response as PollModel;
+                    setPoll(pollModel);
+                    console.log(pollModel);
+                }
+            }
+        }
+
+        getPoll(id as string);
+    }, []);
+
+    useEffect(() => {
+        if(poll) {
+            reset(poll);
+        }
+    }, [poll])
+
+    const vote = async (pollAnswerFrontModel: PollAnswerFrontModel) => {
+        let votePoll: VotePollModel = {
             pollId: pollAnswerFrontModel.id,
-            optionIds: [],
+            pollOptionIds: [],
         };
 
         pollAnswerFrontModel.options.forEach((pollOption: PollOptionFrontModel) => {
             if(pollOption.isSelected) {
-                pollAnswer.optionIds.push(pollOption.id);
+                votePoll.pollOptionIds.push(pollOption.id);
             }
         });
 
-        console.log(pollAnswer);
+        const response: any = await http.post(`${apiUrl}/Poll/Vote`, votePoll, token);
 
-        navigate(`/poll/${id}/result`);
+        if(response?.Error) {
+            console.log(response.Error);
+        } else {
+            navigate(`/poll/${id}/result`);
+        }
     }
 
     return (

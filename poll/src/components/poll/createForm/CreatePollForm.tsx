@@ -1,19 +1,26 @@
 import clsx from "clsx";
-import moment from "moment";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { PollCreateModel } from "../../../entities/poll/create/IPollCreateModel";
-import { PollModel } from "../../../entities/poll/IPollModel";
-import { PollOption } from "../../../entities/poll/IPollOption";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { add } from "../../../redux/poll.slice";
+import { useNavigate } from "react-router";
+import { apiUrl } from "../../../api";
+import { AuthContext } from "../../../contexts/auth.context";
+import { PollCreateModel } from "../../../entities/poll/create/PollCreateModel";
+import { PollModel } from "../../../entities/poll/PollModel";
+import { PollOptionModel } from "../../../entities/poll/PollOptionModel";
+import http from "../../../utils/Http";
+import { ResponseExceptions } from "../../../utils/ResponseExceptions";
 import Button from "../../button/Button";
 import styles from "./CreatePollForm.module.scss"
 
-const CreatePollForm: React.FC = ({}) => {
+const CreatePollForm: React.FC = () => {
+    const { token } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [responseErrors, setResponseErrors] = useState<string>("");
+
     const { register, control, handleSubmit, watch, formState: { errors } } = useForm<PollCreateModel>({
         defaultValues: {
             question: "",
+            isDraft: false,
             options: [
                 { option: "" }, 
                 { option: "" }, 
@@ -27,27 +34,26 @@ const CreatePollForm: React.FC = ({}) => {
         name: "options"
     });
 
-    const polls = useAppSelector((state) => state.poll.value);
-    const dispatch = useAppDispatch();
+    const createPoll = async (pollCreateModel: PollCreateModel) => {
+        const pollOptions: PollOptionModel[] = [];
 
-    const createPoll = (pollCreateModel: PollCreateModel) => {
-        const pollOptions: PollOption[] = [];
-
-        pollCreateModel.options.forEach((val, index) => {
-            pollOptions.push({id: index, option: val.option});
+        pollCreateModel.options.forEach((val, _) => {
+            pollOptions.push({id: 0, option: val.option});
         })
 
-        const pollModel: PollModel = {
-            id: 1,
-            created: moment().toISOString(),
-            endDate: moment().toISOString(),
-            isDraft: false,
-            question: pollCreateModel.question,
-            options: pollOptions,
-            totalVotes: 0
-        }
+        pollOptions.pop()
 
-        dispatch(add(pollModel));
+        pollCreateModel.options = pollOptions;
+
+        try {
+            const response = await http.post(`${apiUrl}/Poll/Create`, { model: pollCreateModel }, token);
+
+            if(response) {
+                navigate(`/Poll/${(response as PollModel).id}`);
+            }
+        } catch (exception) {
+            setResponseErrors(ResponseExceptions.TranslateException(await exception as string))
+        }
     }
 
     const optionsWatcher = watch("options");
@@ -61,6 +67,7 @@ const CreatePollForm: React.FC = ({}) => {
     return (
         <form onSubmit={handleSubmit(createPoll)}>
             {errors.question && <div className={styles.errorLabel}>Musisz podać podać treść pytania.</div>}
+            {responseErrors && <div className={styles.errorLabel}>{responseErrors}</div>}
             <input className={clsx(styles.pollInput, styles.questionInput)} 
                    placeholder="Podaj treść pytania" 
                    {...register("question", { required: true })} />

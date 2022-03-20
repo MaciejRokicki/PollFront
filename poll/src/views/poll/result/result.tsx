@@ -1,34 +1,42 @@
-import moment from "moment";
+import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { PollModel } from "../../../entities/poll/IPollModel";
+import { useParams } from "react-router-dom";
+import { apiUrl } from "../../../api";
+import { PollModel } from "../../../entities/poll/PollModel";
+import http from "../../../utils/Http";
 import styles from "./result.module.scss";
 
 const PollResult = () => {
-    
-    const { control, getValues } = useForm<PollModel>({
-        defaultValues: {
-            id: 1,
-            isDraft: false,
-            created: moment().format("DD.MM.YYYY"),
-            endDate: moment().format("DD.MM.YYYY"),
-            question: "Pytanie - TESTsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
-            totalVotes: 47,
-            options: [
-                { id: 1, option: "Opcja 1", votes: 2 },
-                { id: 2, option: "Opcja 2", votes: 5 },
-                { id: 3, option: "Opcja 3", votes: 7 },
-                { id: 4, option: "Opcja 4", votes: 1 },
-                { id: 5, option: "Opcja 5", votes: 0 },
-                { id: 6, option: "Opcja 6", votes: 10 },
-                { id: 7, option: "Opcja 7", votes: 22 },
-            ]
-        }
-    })
+    let { id } = useParams();
+    const [poll, setPoll] = useState<PollModel>();
+    const { control, getValues, reset } = useForm<PollModel>()
 
     const { fields } = useFieldArray({
         control,
         name: "options"
     })
+
+    useEffect(() => {
+        const getPoll = async (id: string) => {
+            if(id !== undefined) {
+                const response: any = await http.get(`${apiUrl}/Poll/Get`, { id: id });
+    
+                if(response?.Error) {
+                    console.log(response.Error);
+                } else {
+                    const pollModel = response as PollModel;
+                    setPoll(pollModel);
+                    console.log(pollModel);
+                }
+            }
+        }
+
+        getPoll(id as string);
+    }, []);
+
+    useEffect(() => {
+        reset(poll);
+    }, [poll])
 
     const getVotePercent = (votes?: number): number => votes === undefined ? 0 : Math.round((votes / Number(getValues("totalVotes"))) * 100);
 

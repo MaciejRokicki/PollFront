@@ -1,17 +1,27 @@
 import clsx from "clsx";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import { PollCreateModel } from "../../../entities/poll/create/IPollCreateModel";
+import { useNavigate } from "react-router-dom";
+import { apiUrl } from "../../../api";
+import { AuthContext } from "../../../contexts/auth.context";
+import { PollModel } from "../../../entities/poll/PollModel";
+import { PollOptionModel } from "../../../entities/poll/PollOptionModel";
+import http from "../../../utils/Http";
+import { ResponseExceptions } from "../../../utils/ResponseExceptions";
 import Button from "../../button/Button";
 import styles from "./EditPollForm.module.scss"
 
 interface Props {
-    pollCreateModel: PollCreateModel
+    poll: PollModel
 }
 
 const EditPollForm: React.FC<Props> = (props) => {
-    const { register, control, handleSubmit, watch, formState: { errors } } = useForm<PollCreateModel>({
-        defaultValues: props.pollCreateModel
+    const { token } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const [responseErrors, setResponseErrors] = useState<string>("");
+    
+    const { register, control, handleSubmit, watch, formState: { errors } } = useForm<PollModel>({
+        defaultValues: props.poll
     });
 
     const { fields, append } = useFieldArray({
@@ -19,12 +29,26 @@ const EditPollForm: React.FC<Props> = (props) => {
         name: "options"
     });
 
-    const createPoll = (pollCreateModel: PollCreateModel) => {
-        console.log(pollCreateModel)
+    const createPoll = async (pollModel: PollModel) => {
+        try {
+            pollModel.options.pop();
+            await http.put(`${apiUrl}/Poll/SetActive`, { pollId: pollModel.id }, token);
+
+            navigate("/MyPolls");
+        } catch (exception) {
+            setResponseErrors(ResponseExceptions.TranslateException(await exception as string))
+        }
     }
 
-    const savePoll = (pollCreateModel: PollCreateModel) => {
-        console.log(pollCreateModel);
+    const savePoll = async (pollModel: PollModel) => {
+        try {
+            pollModel.options.pop();
+            await http.put(`${apiUrl}/Poll/Update`, { model: pollModel }, token);
+
+            navigate("/MyPolls");
+        } catch (exception) {
+            setResponseErrors(ResponseExceptions.TranslateException(await exception as string))
+        }
     }
 
     const optionsWatcher = watch("options");
@@ -38,6 +62,7 @@ const EditPollForm: React.FC<Props> = (props) => {
     return (
         <form onSubmit={handleSubmit(savePoll)}>
             {errors.question && <div className={styles.errorLabel}>Musisz podać podać treść pytania.</div>}
+            {responseErrors && <div className={styles.errorLabel}>{responseErrors}</div>}
             <input className={clsx(styles.pollInput, styles.questionInput)} 
                    placeholder="Podaj treść pytania" 
                    {...register("question", { required: true })} />

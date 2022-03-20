@@ -1,28 +1,29 @@
 import clsx from "clsx";
-import moment from "moment";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { apiUrl } from "../../api";
 import Table from "../../components/table/Table";
+import { AuthContext } from "../../contexts/auth.context";
+import { PollModel } from "../../entities/poll/PollModel";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { addRange } from "../../redux/poll.slice";
+import http from "../../utils/Http";
 import styles from "./myPolls.module.scss";
-
-interface Poll {
-    id: number;
-    created: string;
-    endDate: string;
-    question: string;
-}
 
 const MyPolls = () => {
     const navigate = useNavigate();
-    const drafts: Poll[] = [
-        {id: 1, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 1" },
-    ];
-    const polls: Poll[] = [
-        {id: 1, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 1" },
-        {id: 2, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 2" },
-        {id: 3, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 3" },
-        {id: 4, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 4" },
-        {id: 5, created: moment().format("DD.MM.YYYY"), endDate: moment().format("DD.MM.YYYY"), question: "Question 5" },
-    ]
+    const dispatch = useAppDispatch();
+    const { token } = useContext(AuthContext);
+
+    useEffect(() => {
+        const getMyPolls = async() => {
+            const response = await http.get(`${apiUrl}/Poll/GetMyPolls`, {}, token);
+
+            dispatch(addRange(response as PollModel[]));
+        }
+
+        getMyPolls();
+    }, [])
 
     const navigateToEditPollHandler = (id: number) => {
         navigate(`/poll/${id}/edit`);
@@ -39,8 +40,8 @@ const MyPolls = () => {
                     <h2>Ankiety zapisane na później</h2>
                     <Table 
                         headers={["Pytanie", "Data utworzenia", "Data zakończenia"]} 
-                        columns={["question", "created", "endDate"]} 
-                        data={drafts} 
+                        columns={["question", "created", "end"]} 
+                        data={useAppSelector((state) => state.poll.value.filter(x => x.isDraft))} 
                         onClickCallback={navigateToEditPollHandler} />
                 </div>
             </section>
@@ -49,8 +50,8 @@ const MyPolls = () => {
                     <h2>Twoje ankiety</h2>
                     <Table 
                         headers={["Pytanie", "Data utworzenia", "Data zakończenia"]} 
-                        columns={["question", "created", "endDate"]} 
-                        data={polls}
+                        columns={["question", "created", "end"]} 
+                        data={useAppSelector((state) => state.poll.value.filter(x => !x.isDraft))}
                         onClickCallback={navigateToPollHandler} />
                 </div>
             </section>
