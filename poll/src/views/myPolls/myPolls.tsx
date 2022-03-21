@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { apiUrl } from "../../api";
 import Table from "../../components/table/Table";
@@ -18,7 +18,7 @@ const MyPolls = () => {
     useEffect(() => {
         const getMyPolls = async() => {
             const response = await http.get(`${apiUrl}/Poll/GetMyPolls`, {}, token);
-
+        
             dispatch(addRange(response as PollModel[]));
         }
 
@@ -33,15 +33,18 @@ const MyPolls = () => {
         navigate(`/poll/${id}`)
     }
 
+    const GetDraftPolls = (): PollModel[] => useAppSelector((state) => state.poll.value.filter(x => x.isDraft));
+    const GetActivePolls = (): PollModel[] => useAppSelector((state) => state.poll.value.filter(x => !x.isDraft))
+
     return (
         <div className={styles.container}>
             <section className={styles.section}>
                 <div className={styles.tableContainer}>
-                    <h2>Ankiety zapisane na później</h2>
+                    <h2>Ankiety w wersji roboczej</h2>
                     <Table 
-                        headers={["Pytanie", "Data utworzenia", "Data zakończenia"]} 
-                        columns={["question", "created", "end"]} 
-                        data={useAppSelector((state) => state.poll.value.filter(x => x.isDraft))} 
+                        headers={["Pytanie", "Data utworzenia"]} 
+                        columns={["question", "created"]} 
+                        data={GetDraftPolls()} 
                         onClickCallback={navigateToEditPollHandler} />
                 </div>
             </section>
@@ -51,7 +54,7 @@ const MyPolls = () => {
                     <Table 
                         headers={["Pytanie", "Data utworzenia", "Data zakończenia"]} 
                         columns={["question", "created", "end"]} 
-                        data={useAppSelector((state) => state.poll.value.filter(x => !x.isDraft))}
+                        data={GetActivePolls()}
                         onClickCallback={navigateToPollHandler} />
                 </div>
             </section>

@@ -8,12 +8,19 @@
     background-color: $creamBrulee;
   }
   
-  .pollTitle {
-    text-align: center;
-  }
-  
+.pollTitle {
+  text-align: center;
+}
+
+.poll {
+  width: 700px;
+  margin: 5px;
+  padding: 5px 15px 15px;
+}
+
+@media screen and (max-width: 768px) {
   .poll {
-    width: 700px;
-    margin: 5px;
-    padding: 5px 15px 15px;
+      width: 100%;
+      margin: 10px;
   }
+}

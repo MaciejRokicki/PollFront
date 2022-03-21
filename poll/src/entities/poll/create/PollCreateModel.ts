@@ -1,7 +1,12 @@
+import { EndPollEnum } from "../EndPollEnum";
 import { PollOptionCreateModel } from "./PollOptionCreateModel";
 
 export interface PollCreateModel {
-    question: string;
-    isDraft: boolean;
-    options: PollOptionCreateModel[];
+    model: {
+        question: string;
+        isDraft: boolean;
+        options: PollOptionCreateModel[];
+    };
+    endOption: EndPollEnum;
+
 }

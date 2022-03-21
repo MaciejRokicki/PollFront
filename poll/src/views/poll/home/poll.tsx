@@ -1,8 +1,10 @@
+import moment from "moment";
 import { useContext, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiUrl } from "../../../api";
 import Button from "../../../components/button/Button";
+import Loader from "../../../components/loader/Loader";
 import PollOption from "../../../components/poll/option/PollOption";
 import { AuthContext } from "../../../contexts/auth.context";
 import { PollModel } from "../../../entities/poll/PollModel";
@@ -14,24 +16,12 @@ interface PollOptionFrontModel {
     id: number;
     option: string;
     isSelected?: boolean;
-
-    // constructor(id: number, option: string, isSelected?: boolean) {
-    //     this.Id = id;
-    //     this.Option = option;
-    //     this.IsSelected = isSelected;
-    // }
 }
 
 interface PollAnswerFrontModel {
     id: number;
     question: string;
     options: PollOptionFrontModel[];
-
-    // constructor(id: number, question: string, options: PollOptionFrontModel[]) {
-    //     this.Id = id;
-    //     this.Question = question;
-    //     this.Options = options;
-    // }
 }
 
 const Poll = () => {
@@ -39,6 +29,7 @@ const Poll = () => {
     let navigate = useNavigate();    
     const { token } = useContext(AuthContext);
     const [poll, setPoll] = useState<PollModel>();
+    const [showSpinner, setShowSpinner] = useState<boolean>(false);
 
     const { register, control, handleSubmit, getValues, reset } = useForm<PollAnswerFrontModel>()
 
@@ -57,7 +48,10 @@ const Poll = () => {
                 } else {
                     const pollModel = response as PollModel;
                     setPoll(pollModel);
-                    console.log(pollModel);
+
+                    if(poll?.end && moment() >= moment(poll?.end)) {
+                        navigate(`/poll/${id}/result`);
+                    }
                 }
             }
         }
@@ -83,7 +77,11 @@ const Poll = () => {
             }
         });
 
+        setShowSpinner(true);
+
         const response: any = await http.post(`${apiUrl}/Poll/Vote`, votePoll, token);
+
+        setShowSpinner(false);
 
         if(response?.Error) {
             console.log(response.Error);
@@ -94,19 +92,27 @@ const Poll = () => {
 
     return (
         <div className={styles.container}>
-            <form className={styles.pollForm} onSubmit={handleSubmit(vote)}>
-                <div className={styles.questionHeader}>
-                    {getValues("question")}
-                </div>
-                {fields.map((option, index) => (
-                    <PollOption 
-                        key={option.id}
-                        {...register(`options.${index}.isSelected`)}>
-                            {getValues(`options.${index}.option`)}
-                    </PollOption>
-                ))}
-                <Button className={styles.sendButton}>Oddaj głos</Button>
-            </form>
+            {poll && !showSpinner ? (
+                <form className={styles.pollForm} onSubmit={handleSubmit(vote)}>
+                    <div className={styles.questionHeader}>
+                        {getValues("question")}
+                    </div>
+                    {fields.map((option, index) => (
+                        <PollOption 
+                            key={option.id}
+                            {...register(`options.${index}.isSelected`)}>
+                                {getValues(`options.${index}.option`)}
+                        </PollOption>
+                    ))}
+                    <div className={styles.infoContainer}>
+                        <div>Ankietę utworzono: {moment(poll.created).utc(true).local().format("DD.MM.YYYY HH:mm")}</div>
+                        {poll.end && <div>Głosować można do: {moment(poll.end).utc(true).local().format("DD.MM.YYYY HH:mm")}</div>}
+                    </div>
+                    <Button className={styles.sendButton}>Oddaj głos</Button>
+                </form>
+            ) : (
+                <Loader/>
+            )}
         </div>
     )
 }

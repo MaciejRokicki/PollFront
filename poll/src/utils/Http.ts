@@ -1,8 +1,8 @@
 enum MethodType {
-    POST = 'POST',
-    PUT = 'PUT',
-    GET = 'GET',
-    DELETE = 'DELETE',
+    POST = "POST",
+    PUT = "PUT",
+    GET = "GET",
+    DELETE = "DELETE",
 }
 
 const requestFunction = <R>(
@@ -13,8 +13,8 @@ const requestFunction = <R>(
     ): Promise<R> => {
 
     const headers = {
-        'Accept': 'application/json, text/plain',
-        'Content-Type': 'application/json;charset=UTF-8',
+        "Accept": "application/json, text/plain",
+        "Content-Type": "application/json;charset=UTF-8",
     }
 
     const options:  RequestInit = {
@@ -56,18 +56,15 @@ const requestFunction = <R>(
             return res.json();
         })
         .then(json => resolve(json))
-        .catch(err => {
-            console.log(err.status);
-            return reject(err)
-        });
+        .catch(err =>  reject(err));
     })
 }
 
 const http = {
-    post: (url: string, payload: any, token: string = '') => requestFunction(url, payload, MethodType.POST, token),
-    get: (url: string, payload: any, token: string = '') => requestFunction(url, payload, MethodType.GET, token),
-    put: (url: string, payload: any, token: string = '') => requestFunction(url, payload, MethodType.PUT, token),
-    delete: (url: string, payload: any, token: string = '') => requestFunction(url, payload, MethodType.DELETE, token)
+    post: (url: string, payload: any, token: string = "") => requestFunction(url, payload, MethodType.POST, token),
+    get: (url: string, payload: any, token: string = "") => requestFunction(url, payload, MethodType.GET, token),
+    put: (url: string, payload: any, token: string = "") => requestFunction(url, payload, MethodType.PUT, token),
+    delete: (url: string, payload: any, token: string = "") => requestFunction(url, payload, MethodType.DELETE, token)
 }
 
 export default http;

@@ -29,6 +29,10 @@
     background-color: $fuelYellow;
 }
 
+.infoContainer {
+    margin: 5px 3px;
+}
+
 @media screen and (max-width: 768px) {
     .pollForm {
         width: 100%;

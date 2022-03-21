@@ -8,7 +8,7 @@ export type ProtectedRouteProps = {
 };
 
 export default function ProtectedRoute({authentiactionPath, target}: ProtectedRouteProps) {
-    const {isAuthenticated} = useContext(AuthContext);
+    const { isAuthenticated } = useContext(AuthContext);
 
     if(isAuthenticated) {
         return target;

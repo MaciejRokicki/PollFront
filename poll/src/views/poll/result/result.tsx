@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { apiUrl } from "../../../api";
+import Loader from "../../../components/loader/Loader";
 import { PollModel } from "../../../entities/poll/PollModel";
 import http from "../../../utils/Http";
 import styles from "./result.module.scss";
@@ -26,7 +27,6 @@ const PollResult = () => {
                 } else {
                     const pollModel = response as PollModel;
                     setPoll(pollModel);
-                    console.log(pollModel);
                 }
             }
         }
@@ -42,33 +42,37 @@ const PollResult = () => {
 
     return (
         <div className={styles.container}>
-            <form className={styles.pollForm}>
-                <div className={styles.questionHeader}>
-                    {getValues("question")}
-                </div>
-                {fields.map((option, _) => {
-                    const votePercent: number = getVotePercent(option.votes);
+            {poll ? (    
+                <form className={styles.pollForm}>
+                    <div className={styles.questionHeader}>
+                        {getValues("question")}
+                    </div>
+                    {fields.map((option, _) => {
+                        const votePercent: number = getVotePercent(option.votes);
 
-                    return (
-                        <div key={option.id} className={styles.pollOptionResultContainer} >
-                            <div className={styles.pollOptionResultBackground}>
-                                <div className={styles.pollOptionResultLabel}>
-                                    <div>
-                                        {option.option}
-                                    </div> 
-                                    <div>
-                                        {votePercent}%
+                        return (
+                            <div key={option.id} className={styles.pollOptionResultContainer} >
+                                <div className={styles.pollOptionResultBackground}>
+                                    <div className={styles.pollOptionResultLabel}>
+                                        <div>
+                                            {option.option}
+                                        </div> 
+                                        <div>
+                                            {votePercent}%
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div style={{width: `${votePercent}%`}} className={styles.pollOptionResultFillBackground}></div>   
-                        </div>       
-                    )
-                })}
-                <div className={styles.totalVotesLabel}>
-                    Oddane głosy: {getValues("totalVotes")}
-                </div>
-            </form>
+                                <div style={{width: `${votePercent}%`}} className={styles.pollOptionResultFillBackground}></div>   
+                            </div>       
+                        )
+                    })}
+                    <div className={styles.totalVotesLabel}>
+                        Oddane głosy: {getValues("totalVotes")}
+                    </div>
+                </form>
+            ) : (
+                <Loader/>   
+            )}
         </div>
     )
 }

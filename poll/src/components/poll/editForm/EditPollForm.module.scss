@@ -26,8 +26,38 @@
 }
 
 .saveButton {
-    width: 100px;
+    min-width: 100px;
     height: 30px;
     margin: 10px 0px 0px 5px;
     font-weight: bold;
+}
+
+.extraOptionsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0px 5px 5px;
+}
+
+.isDraftContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.endSelectContainer {
+    display: flex;
+    flex-direction: column;
+    margin-right: 3px;
+}
+
+.endSelectContainer label{
+    margin: 5px 0px 2px 2px;
+}
+
+.endSelect {
+    border: none;
+    height: 30px;
+    border-radius: 5px;
+    background-color: $brightSun;
+    width: 100%;
 }
