@@ -1,3 +1,4 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -68,6 +69,8 @@ const PollResult = () => {
                     })}
                     <div className={styles.totalVotesLabel}>
                         Oddane głosy: {getValues("totalVotes")}
+                        <div>Ankietę utworzono: {moment(poll.created).utc(true).local().format("DD.MM.YYYY HH:mm")}</div>
+                        {poll.end && <div>Ankieta zakończyła się: {moment(poll.end).utc(true).local().format("DD.MM.YYYY HH:mm")}</div>}
                     </div>
                 </form>
             ) : (

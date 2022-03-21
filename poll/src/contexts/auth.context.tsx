@@ -32,7 +32,11 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({children}) => {
 	window.fetch = (...args) => (async(args) => {
 		var response = await fetch(...args);
 		
-		if(response.status === 401) {
+		if(response.status === 401 && test) {
+			if(isAuthenticated === true || token !== "") {
+				signOut();
+			}
+
 			navigate("/signIn");
 		}
 
