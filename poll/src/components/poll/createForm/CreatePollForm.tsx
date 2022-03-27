@@ -50,7 +50,7 @@ const CreatePollForm: React.FC = () => {
         pollOptions.pop()
 
         pollCreateModel.model.options = pollOptions;
-        console.log(pollCreateModel);
+
         try {
             setShowSpinner(true);
             const response = await http.post(`${apiUrl}/Poll/Create`, { 

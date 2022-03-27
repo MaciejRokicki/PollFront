@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { apiUrl } from "../api";
 import { SignInRequest } from "../entities/authentication/SignInRequest";
 import { SignInResponse } from "../entities/authentication/SignInResponse";
@@ -27,21 +27,27 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({children}) => {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
 	const [token, setToken] = useState<string>("");
 	const navigate = useNavigate();
+	const location = useLocation();
 
-	const fetch = window.fetch;
-	window.fetch = (...args) => (async(args) => {
-		var response = await fetch(...args);
+	//autorefresh, gdy jest refreshtoken i zwrotka jest 401, albo redirect na signin
+	const { fetch: originalFetch } = window;
+	window.fetch = async (...args): Promise<Response> => {
+		let response: Response = await originalFetch(...args);
 		
-		if(response.status === 401 && test) {
-			if(isAuthenticated === true || token !== "") {
-				signOut();
+		if (response.status === 401) {
+			if(!isAuthenticated || token !== "") {
+				refreshToken();
+
+				return Promise.reject(response);
 			}
 
 			navigate("/signIn");
+
+			return Promise.reject(response);
 		}
 
 		return response;
-	})(args);
+	  };
 
 	const signIn = async (email: string, password: string) => {
 		try {
@@ -78,8 +84,11 @@ const AuthProvider: React.FC<IAuthProviderProps> = ({children}) => {
 		}
 	}
 
+	//f5 strony, jesli jest na stronie wymagajacej autoryzacji to redirect
 	useEffect(() => {
-		refreshToken();
+		refreshToken().finally(() => {
+			navigate(location.pathname);
+		});
 	}, []);
 
 	return (

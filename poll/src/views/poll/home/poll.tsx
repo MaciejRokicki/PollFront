@@ -49,9 +49,6 @@ const Poll = () => {
                     const pollModel = response as PollModel;
                     setPoll(pollModel);
 
-                    console.log(moment());
-                    console.log(moment() >= moment(poll?.end))
-
                     if(moment() >= moment(poll?.end)) {
                         navigate(`/poll/${id}/result`);
                     }
