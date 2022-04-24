@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import moment from "moment";
 import { useContext, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,37 @@ const EditPollForm: React.FC<Props> = (props) => {
     const navigate = useNavigate();
     const [responseErrors, setResponseErrors] = useState<string>("");
     
+    const getEndDateOption = (created: string, end?: string): EndPollEnum => {
+        if(end === undefined) {
+            return EndPollEnum.NoTime;
+        }
+
+        let diff = moment(end).diff(moment(created)) / 1000 / 60;
+
+        switch(diff) {
+            case 10:
+                return EndPollEnum.min10;
+
+            case 30:
+                return EndPollEnum.min30;
+
+            case 60:
+                return EndPollEnum.h1;
+
+            case 6 * 60:
+                return EndPollEnum.h6;
+
+            case 12 * 60:
+                return EndPollEnum.h12;
+
+            case 24 * 60:
+                return EndPollEnum.d1;
+
+            default:
+                return EndPollEnum.NoTime;
+        }
+    }
+
     const { register, control, handleSubmit, watch, formState: { errors } } = useForm<PollUpdateModel>({
         defaultValues: {
             model: {
@@ -31,7 +63,7 @@ const EditPollForm: React.FC<Props> = (props) => {
                 isDraft: true,
                 options: props.poll.options as PollOptionUpdateModel[]
             },
-            endOption: EndPollEnum.min30
+            endOption: getEndDateOption(props.poll.created, props.poll.end)
         }
     });
 
@@ -100,7 +132,7 @@ const EditPollForm: React.FC<Props> = (props) => {
                     placeholder="Podaj treść odpowiedzi"
                     {...register(`model.options.${index}.option`)} />
             ))}
-            <Button type="button" className={styles.saveButton} variant="darkRed" onClick={handleSubmit(createPoll)}>Stwórz</Button>
+            <Button type="button" className={styles.saveButton} variant="darkRed" onClick={handleSubmit(createPoll)}>Aktywuj ankietę bez zapisywania</Button>
             <Button type="submit" className={styles.saveButton} variant="darkRed">Zapisz jako wersja robocza</Button>
         </form>
     );

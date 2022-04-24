@@ -39,7 +39,7 @@ const PollResult = () => {
         reset(poll);
     }, [poll])
 
-    const getVotePercent = (votes?: number): number => votes === undefined ? 0 : Math.round((votes / Number(getValues("totalVotes"))) * 100);
+    const getVotePercent = (votes?: number): number => votes === undefined || getValues("totalVotes") === 0 ? 0 : Math.round((votes / Number(getValues("totalVotes"))) * 100);
 
     return (
         <div className={styles.container}>

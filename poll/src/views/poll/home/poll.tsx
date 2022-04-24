@@ -41,18 +41,20 @@ const Poll = () => {
     useEffect(() => {
         const getPoll = async (id: string) => {
             if(id !== undefined) {
-                const response: any = await http.get(`${apiUrl}/Poll/Get`, { id: id });
-    
-                if(response?.Error) {
-                    console.log(response.Error);
-                } else {
+                await http.get(`${apiUrl}/Poll/Get`, { id: id })
+                .then((response) => {
                     const pollModel = response as PollModel;
-                    setPoll(pollModel);
+                    const endDate = moment.utc(pollModel?.end);
 
-                    if(moment() >= moment(poll?.end)) {
+                    if(moment().isAfter(endDate)) {
                         navigate(`/poll/${id}/result`);
                     }
-                }
+
+                    setPoll(pollModel);
+                })
+                .catch((er) => {
+                    console.log(er);
+                })
             }
         }
 
@@ -78,16 +80,16 @@ const Poll = () => {
         });
 
         setShowSpinner(true);
-
-        const response: any = await http.post(`${apiUrl}/Poll/Vote`, votePoll, token);
+        
+        await http.post(`${apiUrl}/Poll/Vote`, votePoll, token)
+        .then(() => {
+            navigate(`/poll/${id}/result`);
+        })
+        .catch(() => {
+            navigate(`/poll/${id}/result`);
+        });
 
         setShowSpinner(false);
-
-        if(response?.Error) {
-            console.log(response.Error);
-        } else {
-            navigate(`/poll/${id}/result`);
-        }
     }
 
     return (
