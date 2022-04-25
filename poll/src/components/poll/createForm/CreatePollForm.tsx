@@ -41,35 +41,30 @@ const CreatePollForm: React.FC = () => {
     });
 
     const createPoll = async (pollCreateModel: PollCreateModel) => {
-        const pollOptions: PollOptionModel[] = [];
+        setShowSpinner(true);
 
-        pollCreateModel.model.options.forEach((val, _) => {
-            pollOptions.push({id: 0, option: val.option});
-        })
+        let tmp: PollCreateModel = { 
+            model: { 
+                ...pollCreateModel.model 
+            }, 
+            endOption: pollCreateModel.endOption 
+        };
 
-        pollOptions.pop()
+        tmp.model.options = pollCreateModel.model.options.slice(0, pollCreateModel.model.options.length-1);
 
-        pollCreateModel.model.options = pollOptions;
-
-        try {
-            setShowSpinner(true);
-            const response = await http.post(`${apiUrl}/Poll/Create`, { 
-                model: pollCreateModel.model, 
-                endOption: pollCreateModel.endOption 
-            }, token);
-            
+        await http.post(`${apiUrl}/Poll/Create`, { model: tmp.model, endOption: tmp.endOption }, token)
+        .then((response) => {
             if(isAuthenticated && pollCreateModel.model.isDraft) {
                 navigate(`/MyPolls`);
                 return;
-            } 
-
-            if(response) {
-                setShowSpinner(false);
-                navigate(`/Poll/${(response as PollModel).id}`);
             }
-        } catch (exception) {
-            setResponseErrors(ResponseExceptions.TranslateException(await exception as string))
-        }
+
+            setShowSpinner(false);
+            navigate(`/Poll/${(response as PollModel).id}`);
+        })
+        .catch((err: Promise<string>) => {
+            err.then((exception: string) => setResponseErrors(ResponseExceptions.TranslateException(exception)));
+        });
     }
 
     const optionsWatcher = watch("model.options");
@@ -83,9 +78,13 @@ const CreatePollForm: React.FC = () => {
     return (
         <div className={styles.container}>
             {!showSpinner ? (
-                <form onSubmit={handleSubmit(createPoll)}>
-                    {errors.model?.question && <div className={styles.errorLabel}>Musisz podać podać treść pytania.</div>}
-                    {responseErrors && <div className={styles.errorLabel}>{responseErrors}</div>}
+                <form className={styles.createForm} onSubmit={handleSubmit(createPoll)}>
+                    {errors.model?.question && (
+                        <div className={styles.errorLabel}>Musisz podać podać treść pytania.</div>
+                    )}
+                    {responseErrors && (
+                        <div className={styles.errorLabel}>{responseErrors}</div>
+                    )}
                     <input className={clsx(styles.pollInput, styles.questionInput)} 
                         placeholder="Podaj treść pytania" 
                         {...register("model.question", { required: true })} />

@@ -7,7 +7,6 @@ import { apiUrl } from "../../../api";
 import { AuthContext } from "../../../contexts/auth.context";
 import { EndPollEnum } from "../../../entities/poll/EndPollEnum";
 import { PollModel } from "../../../entities/poll/PollModel";
-import { PollOptionModel } from "../../../entities/poll/PollOptionModel";
 import { PollOptionUpdateModel } from "../../../entities/poll/update/PollOptionUpdateModel";
 import { PollUpdateModel } from "../../../entities/poll/update/PollUpdateModel";
 import http from "../../../utils/Http";
@@ -73,28 +72,41 @@ const EditPollForm: React.FC<Props> = (props) => {
     });
 
     const createPoll = async (pollUpdateModel: PollUpdateModel) => {
-        try {
-            pollUpdateModel.model.options.pop();
-            await http.put(`${apiUrl}/Poll/SetActive`, { pollId: pollUpdateModel.model.id }, token);
-
+        await http.put(`${apiUrl}/Poll/SetActive`, { pollId: pollUpdateModel.model.id }, token)
+        .then(() => {
             navigate("/MyPolls");
-        } catch (exception) {
-            setResponseErrors(ResponseExceptions.TranslateException(await exception as string))
-        }
+        })
+        .catch((err: Promise<string>) => {
+            err.then((exception: string) => setResponseErrors(ResponseExceptions.TranslateException(exception)));
+        });
     }
 
     const savePoll = async (pollUpdateModel: PollUpdateModel) => {
-        try {
-            pollUpdateModel.model.options.pop();
-            await http.put(`${apiUrl}/Poll/Update`, { model: pollUpdateModel.model, endOption: pollUpdateModel.endOption }, token);
+        let tmp: PollUpdateModel = { 
+            model: { 
+                ...pollUpdateModel.model 
+            }, 
+            endOption: pollUpdateModel.endOption 
+        };
 
+        tmp.model.options = pollUpdateModel.model.options.slice(0, pollUpdateModel.model.options.length-1);
+
+        await http.put(`${apiUrl}/Poll/Update`, { model: tmp.model, endOption: tmp.endOption }, token)
+        .then(() => {
             navigate("/MyPolls");
-        } catch (exception) {
-            setResponseErrors(ResponseExceptions.TranslateException(await exception as string))
-        }
+        })
+        .catch((err: Promise<string>) => {
+            err.then((exception: string) => setResponseErrors(ResponseExceptions.TranslateException(exception)));
+        });
     }
 
     const optionsWatcher = watch("model.options");
+
+    useEffect(() => {
+        if(!props.poll.isDraft) {
+            navigate("/");
+        }
+    }, [])
 
     useEffect(() => {
         if(optionsWatcher[optionsWatcher.length - 1].option !== "") {
@@ -104,8 +116,12 @@ const EditPollForm: React.FC<Props> = (props) => {
 
     return (
         <form onSubmit={handleSubmit(savePoll)}>
-            {errors.model?.question && <div className={styles.errorLabel}>Musisz podać podać treść pytania.</div>}
-            {responseErrors && <div className={styles.errorLabel}>{responseErrors}</div>}
+            {errors.model?.question && (
+                <div className={styles.errorLabel}>Musisz podać podać treść pytania.</div>
+            )}
+            {responseErrors && (
+                <div className={styles.errorLabel}>{responseErrors}</div>
+            )}
             <input className={clsx(styles.pollInput, styles.questionInput)} 
                    placeholder="Podaj treść pytania" 
                    {...register("model.question", { required: true })} />
